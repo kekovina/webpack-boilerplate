@@ -87,7 +87,9 @@ module.exports = {
     output: {
         filename: `js/${filename('js')}`,
         path: path.resolve(__dirname, 'app'),
-        publicPath: ''
+        publicPath: '',
+        clean: true,
+        assetModuleFilename: filename('[ext]')
     },
     optimization: optimization(),
     plugins: plugins(),
@@ -151,31 +153,12 @@ module.exports = {
                 'sass-loader']
             },
             {
-                test: /\.(?:svg)$/,
-                use: [{
-                    loader: 'file-loader',
-                    options:{
-                        name: `./img/${filename('[ext]')}`
-                    }
-                }]
-            },
-            {
-                test: /\.(?:|gif|png|jpg|jpeg)$/,
-                use: [{
-                    loader: 'file-loader',
-                    options:{
-                        name: `./img/${filename('[ext]')}`
-                    }
-                }]
+                test: /\.(?:|gif|png|jpg|jpeg|svg)$/,
+                type: "asset/resource"
             },
             {
                 test: /\.(?:|ttf)$/,
-                use: [{
-                    loader: 'file-loader',
-                    options:{
-                        name: `./fonts/${filename('[ext]')}`
-                    }
-                }]
+                type: "asset/resource"
             },
             {
                 test: /\.js$/,
