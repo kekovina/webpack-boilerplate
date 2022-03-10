@@ -39,18 +39,24 @@ const plugins = () => {
                 collapseWhitespace: isProd
             }
         }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+          }),
+          new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+        }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: `css/${filename('css')}`
+        }),new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src/img'),
+                    to: path.resolve(__dirname, 'app/img')
+                }
+            ]
         }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, 'src/img'),
-        //             to: path.resolve(__dirname, 'app/img')
-        //         }
-        //     ]
-        // }),
+       
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
@@ -83,7 +89,7 @@ const plugins = () => {
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: './js/main.js',
+    entry: ['babel-polyfill', './js/main.js'],
     output: {
         filename: `js/${filename('js')}`,
         path: path.resolve(__dirname, 'app'),
@@ -93,6 +99,7 @@ module.exports = {
     },
     optimization: optimization(),
     plugins: plugins(),
+    resolve: {},
     devServer: {
         historyApiFallback: true,
         static: path.resolve(__dirname, 'app'),
@@ -110,7 +117,7 @@ module.exports = {
                     {   
                         loader: 'html-loader',
                         options: {
-                            sources: true
+                            sources: false
                         }
                     },
                 {
@@ -152,10 +159,7 @@ module.exports = {
                 'css-loader', 
                 'sass-loader']
             },
-            {
-                test: /\.(?:|gif|png|jpg|jpeg|svg)$/,
-                type: "asset/resource"
-            },
+            
             {
                 test: /\.(?:|ttf)$/,
                 type: "asset/resource"
