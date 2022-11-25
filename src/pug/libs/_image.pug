@@ -1,0 +1,3 @@
+
+mixin image(name, className)
+    img(class=`${className ? className : ''}` src=require(`./img/${name}`) alt=name)
